@@ -24,8 +24,7 @@
                     <button type="submit" @click="Ajouter" class="submit-btn">
                         submit 
                     </button>
-                    <!-- <input type="submit" @click="Ajouter" name="ajouter" class="Submit-btn" value="Envoyer"/> -->
-                    <!-- <router-link to="/Login" tag="button" class="submit-btn"> Submit </router-link> -->
+
                 </div>
             </div>
         </div>

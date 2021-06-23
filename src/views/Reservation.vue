@@ -5,7 +5,7 @@
 
         <div class="header">
             <div class="d-flex justify-content-between">
-                <h1 class="text-wlc">Welcome :{{result.Reference}}</h1>
+                <h1 class="text-wlc">Welcome</h1>
                 <div class="text-end">
                     <router-link to="/" tag="button" class="btn btn-danger"> 
                         Log-Out &nbsp;<i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -217,7 +217,8 @@ export default {
             }).then(res=>{
                 console.log(res);
             }).catch(err=>console.log(err));
-             this.Id="";
+            
+            this.Id="";
             this.date ="";
             this.Horaire ="";
             this.T_Consultation="";
@@ -231,7 +232,6 @@ export default {
 
                 body: JSON.stringify({   
                     Id:this.Id,
-
                 }),
 
             });

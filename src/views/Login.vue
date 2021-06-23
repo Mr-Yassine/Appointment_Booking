@@ -29,7 +29,7 @@ export default {
       e.preventDefault();
       localStorage.setItem("userkey", this.ref);
       localStorage.removeItem("key");
-        this.$router.push("/reservation");
+      this.$router.push("/reservation");
     },
   },
 };

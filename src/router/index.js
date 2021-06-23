@@ -61,12 +61,7 @@ const routes = [
     component: Login,
   },
 
-  //  //Ajouter
-  //  {
-  //   path: "/Ajouter",
-  //   name: "Ajouter",
-  //   component: Ajouter,
-  // },
+
 ];
 
 const router = new VueRouter({
