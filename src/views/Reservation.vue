@@ -5,7 +5,7 @@
 
         <div class="header">
             <div class="d-flex justify-content-between">
-                <h1 class="text-wlc">Welcome</h1>
+                <h1 class="text-wlc">Welcome :{{result.Reference}}</h1>
                 <div class="text-end">
                     <router-link to="/" tag="button" class="btn btn-danger"> 
                         Log-Out &nbsp;<i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -21,10 +21,6 @@
             New appointment &nbsp; <i class="fa fa-plus" aria-hidden="true"></i> 
         </button>
 
-        <!-- <router-link to="/Ajouter" tag="button" class="submit-btn"> 
-            New appointment &nbsp; <i class="fa fa-plus" aria-hidden="true"></i>    
-        </router-link> -->
-
 
         <table class="table text-center ">
             <thead>
@@ -35,29 +31,33 @@
                     <th> Type de Consultation </th>
                     <th> Action </th>
                 </tr>
+            </thead>
 
-                <tr>
-                    <td> 1 </td>
-                    <td> 01-07-2021 </td>
-                    <td> 10-11 </td>
-                    <td> Controle </td>
+            <tbody>
+
+                <tr v-for="result in results" :key="result.Id">
+                    <td scope="row">{{result.Id}}</td>
+                    <td>{{result.date}}</td>
+                    <td>{{result.Horaire}}</td>
+                    <td>{{result.T_Consultation}}</td>
+
                     <td> 
                         <div class="d-flex justify-content-center" id="action">
 
-                            <button type="submit" class="btn btn-warning" name="update" v-on:click = "edit_appointment=true">
+                            <button type="submit" class="btn btn-warning" name="update" v-on:click = "edit_appointment=true;getId(result.Id);edit()">
                                 Update &nbsp;<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </button>
                             &nbsp;
                                     
-                            <button type="submit" class="btn btn-danger" name="submit" v-on:click = "delete_appointment=true">
+                            <button type="submit" class="btn btn-danger" name="submit" v-on:click = "delete_appointment=true;getId(result.Id)">
                                 Delete &nbsp;<i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
 
                         </div>
-                    </td>
+                    </td> 
                 </tr>
 
-            </thead>
+            </tbody>
         </table>
 
         <br>
@@ -76,11 +76,11 @@
                 </div>
                         
                 <div class="card-body d-flex justify-content-center align-items-center">
-                    <form action="#" method="POST" class="text-center align-items-center">
+                    <form class="text-center align-items-center">
 
-                        <input class="form-control" v-model="Nom" placeholder="Date" type="Date">
+                        <input class="form-control"  placeholder="Date" type="Date" v-model="date" >
                         <div>
-                            <select class="form-control" id="input" type="Time">
+                            <select class="form-control" id="input" type="Time" v-model="Horaire">
                                 <option disabled selected> Choix d'horaire </option>
                                 <option>8-10</option>
                                 <option>10-12</option>
@@ -88,10 +88,10 @@
                                 <option>16-18</option>
                             </select>
                         </div>
-                        <input class="form-control" v-model="T_cons" placeholder="Type de Consultation" type="text">
-                        <input class="form-control" v-model="Reference" placeholder="CIN" type="text">
+                        <input class="form-control"  placeholder="Type de Consultation" type="text" v-model="T_Consultation" >
+                        <input class="form-control"  placeholder="Reference" type="text" v-model="Reference" >
                     
-                        <button type="button" class="submit-btn" v-on:click ="add_appointment=false">
+                        <button type="button" class="submit-btn" @click="Ajouter">
                             Submit
                         </button> 
                         <!-- <router-link to="/Reservation" tag="button" class="submit-btn"> Submit </router-link> -->
@@ -115,11 +115,11 @@
                 </div>
                         
                 <div class="card-body d-flex justify-content-center align-items-center">
-                    <form action="#" method="POST" class="text-center align-items-center">
+                    <form class="text-center align-items-center">
 
-                        <input class="form-control" v-model="Nom" placeholder="Date" type="Date">
+                        <input class="form-control" v-model="date" placeholder="Date" type="Date">
                         <div>
-                            <select class="form-control" id="input" type="Time">
+                            <select class="form-control" id="input" type="Time" v-model="Horaire">
                                 <option disabled selected> Choix d'horaire </option>
                                 <option>8-10</option>
                                 <option>10-12</option>
@@ -127,9 +127,9 @@
                                 <option>16-18</option>
                             </select>
                         </div>
-                        <input class="form-control" v-model="T_cons" placeholder="Type de Consultation" type="text">
+                        <input class="form-control" v-model="T_Consultation" placeholder="Type de Consultation" type="text">
 
-                        <button type="button" class="submit-btn" v-on:click ="edit_appointment=false">
+                        <button type="button" class="submit-btn" @click=" Update">
                             Update
                         </button> 
                     </form>
@@ -155,7 +155,7 @@
 
                         <p class="delete_msg"> Are you sure that you wanna delete your appointment !!? </p>
 
-                        <button type="button" id="delete-btn" class="btn btn-danger" v-on:click ="delete_appointment=false">
+                        <button type="button" id="delete-btn" class="btn btn-danger" @click="Delete">
                             Delete
                         </button> 
                     </form>
@@ -176,9 +176,113 @@ export default {
             alert_success: false,
             alert_error: false,
             edit_appointment: false,
-            delete_appointment: false
+            delete_appointment: false,
+
+            results : [],
+            Id:"",
+            date :"",
+            Horaire :"",
+            T_Consultation:"",
+            Reference:"",
+
+            clientRef: localStorage.getItem("userkey")
+
         }
-    }
+    },
+
+    mounted(){
+        this.index();
+    },
+
+    methods: {
+
+        index(){
+            fetch (`http://localhost/Reservation/RdvCont/index/${this.clientRef}`)
+            .then(res => res.json())
+            .then(data => this.results = data)
+            .catch(err =>console.log(err.message))
+        },
+
+        async Ajouter(){
+            await fetch ("http://localhost/Reservation/RdvCont/ajouter",{
+                method: "POST",
+
+                body: JSON.stringify({   
+                    date:this.date,
+                    Horaire:this.Horaire,
+                    T_Consultation:this.T_Consultation,
+                    Reference:this.Reference
+                }),
+
+            }).then(res=>{
+                console.log(res);
+            }).catch(err=>console.log(err));
+             this.Id="";
+            this.date ="";
+            this.Horaire ="";
+            this.T_Consultation="";
+            this.Reference="";
+            this.add_appointment=false;
+            this.index();
+        },
+        async edit(){
+            const response= await fetch ("http://localhost/Reservation/RdvCont/edit",{
+                method: "POST",
+
+                body: JSON.stringify({   
+                    Id:this.Id,
+
+                }),
+
+            });
+            const data=await response.json();
+            console.log(data);
+            this.Id=data.Id;
+            this.date =data.date;
+            this.Horaire =data.Horaire;
+            this.T_Consultation=data.T_Consultation;
+
+        },
+        async Update(){
+
+            console.log(this.date);
+
+            await fetch(
+                "http://localhost/Reservation/RdvCont/update",{
+                    method: "PUT",
+                    body: JSON.stringify({   
+                        Id:this.Id,
+                        "Date":this.date,
+                        Horaire:this.Horaire,
+                        T_Consultation:this.T_Consultation})
+                }
+            );
+            // const data = await response.json();
+            this.edit_appointment=false;
+            this.index();
+        },
+
+        async Delete(){
+            await fetch ("http://localhost/Reservation/RdvCont/delete",{
+                method: "POST",
+
+                body: JSON.stringify({   
+                    Id:this.Id,
+
+                }),
+
+            }).then(res=>{
+                console.log(res);
+            }).catch(err=>console.log(err));
+            this.delete_appointment=false;
+            this.index();
+        },
+        
+        getId(id){
+            this.Id=id;
+            console.log(id);
+        }
+    },  
 }
 </script>
 

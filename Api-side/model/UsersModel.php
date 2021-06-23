@@ -5,7 +5,15 @@
     //create a new user
     class UsersModel{
 
-        //insert
+        // //insert
+        // function selectAll(){
+        //     $query = "SELECT * FROM  `users` ";
+        //     $obj = new connection();
+        //     $con=$obj->connect();
+        //     $result= $con->query($query);
+        //     return $result->fetchAll(PDO::FETCH_ASSOC);
+        // }
+
         function insert ($Reference,$Nom,$Prenom,$Email,$Tel,$Age) {
 
             $query = "INSERT INTO `users`(`Reference`, `Nom`, `Prenom`, `Email`, `Tel`, `Age`) VALUES ('$Reference','$Nom','$Prenom','$Email','$Tel','$Age')";        
@@ -28,4 +36,6 @@
             $result= $con->query($query);
             return $result->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        
     }

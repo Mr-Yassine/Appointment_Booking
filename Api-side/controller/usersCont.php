@@ -5,10 +5,28 @@ require_once "./model/UsersModel.php";
 //login & signin classe
 class UsersCont {
 
-	//index login
-	function index()
-	{
-		// require __DIR__."/../view/home.php";
+	 
+	//select
+	// function index(){
+
+	// 	// header('Content-Type: application/json');
+	// 	$obj= new UsersModel();
+	// 	// $user= array();
+	// 	$res = $obj->selectAll()->fetchAll(PDO::FETCH_ASSOC);
+	// 	echo json_encode($res);
+	// }
+	
+
+	//insert
+	function add(){
+
+		// On récupère les informations envoyées
+    	$data = json_decode(file_get_contents("php://input"));
+
+    	$ref=new UsersModel();
+
+		$value=$ref->insert($data->Reference, $data->Nom, $data->Prenom, $data->Email, $data->Tel, $data->Age);
+
 	}
 
 	function selectRef(){
@@ -63,21 +81,17 @@ class UsersCont {
 		if(!empty($data->Reference.$result) && !empty($data->Nom) && !empty($data->Prenom) && !empty($data->Email) && !empty($data->Tel) && !empty($data->Age))
 		{
 			
-			// $rdv->reference.$result=$data->reference.$result;
-			$rdv->Reference=$data->Reference;
-			$rdv->Nom=$data->Nom;
-			$rdv->Prenom=$data->Prenom;
-			$rdv->Email=$data->Email;
-			$rdv->Tel=$data->Tel;
-			$rdv->Age=$data->Age;
 
-			$value=$rdv->insert($rdv->Reference.$result, $rdv->Nom, $rdv->Prenom,$rdv->Email, $rdv->Tel, $rdv->Age);
+			// $value=$rdv->insert($rdv->Reference.$result, $rdv->Nom, $rdv->Prenom,$rdv->Email, $rdv->Tel, $rdv->Age);
+			$value=$rdv->insert($data->Reference, $data->Nom, $data->Prenom,$data->Email, $data->Tel, $data->Age);
 
 			if($value){
                 // Ici la création a fonctionné
                 // On envoie un code 201
                 http_response_code(201);
                 echo json_encode(["message" => "L'ajout a été effectué".$value]);
+				
+
             
             } else {
                 // Ici la création n'a pas fonctionné

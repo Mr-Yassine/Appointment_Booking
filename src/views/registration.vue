@@ -21,7 +21,11 @@
                         <input v-model="Tel" placeholder="Telephone" type="Tel">
                         <input v-model="Reference" placeholder="CIN" type="text">
                     </div>
-                    <router-link to="/Login" tag="button" class="submit-btn"> Submit </router-link>
+                    <button type="submit" @click="Ajouter" class="submit-btn">
+                        submit 
+                    </button>
+                    <!-- <input type="submit" @click="Ajouter" name="ajouter" class="Submit-btn" value="Envoyer"/> -->
+                    <!-- <router-link to="/Login" tag="button" class="submit-btn"> Submit </router-link> -->
                 </div>
             </div>
         </div>
@@ -31,8 +35,39 @@
 
 <script>
     export default {
-        name:'registration'
+        name:'registration',
+        data(){
+            return{
+                Nom :"",
+                Prenom :"",
+                Email:"",
+                Age:"",
+                Tel :"",
+                Reference:""
+            }
+        },
+        methods: {
+            async Ajouter(){
+                await fetch ("http://localhost/Reservation/usersCont/add",{
+                    method: "POST",
+                   
+                    body: JSON.stringify({
+                        
+                        Nom:this.Nom,
+                        Prenom:this.Prenom,
+                        Email:this.Email,
+                        Age:this.Age,
+                        Tel:this.Tel,
+                        Reference:this.Reference,
+                    }),
+                }).then(res=>{
+                    console.log(res);
+                }).catch(err=>console.log(err));
+                this.$router.push("/Login/"+this.Reference);
+            }
+        },  
     }
+   
 </script>
     
 

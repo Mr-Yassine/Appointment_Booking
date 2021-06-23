@@ -6,8 +6,9 @@
     class RdvModel{
 
         //select  
-        function select(){
-            $query ="SELECT * FROM `rendez-vous`";
+        function select($data){
+            
+            $query ="SELECT * FROM `rendez-vous` WHERE Reference = '$data'";
             $obj = new connection();
             $con=$obj->connect();
             $result= $con->query($query);
@@ -15,10 +16,10 @@
         }
 
         //inset
-        function insert($Date, $Horaire, $T_cons, $Reference){
+        function insert($date, $Horaire, $T_Consultation, $Reference){
             
-            $query ="INSERT INTO `rendez-vous`(`Date`,`T_Consultation`,`Horaire`,`Reference`) VALUES ('$Date','$Horaire','$T_cons','$Reference')";
             $obj = new connection();
+            $query ="INSERT INTO `rendez-vous`(`Date`,`T_Consultation`,`Horaire`,`Reference`) VALUES ('$date','$T_Consultation','$Horaire','$Reference')";
             $con=$obj->connect();
 
             if($result= $con->query($query)){
@@ -34,24 +35,20 @@
             $obj = new connection();
             $con=$obj->connect();
             $result =  $con->query($query);
-            $res=$result->fetch(PDO::FETCH_ASSOC);
-            if($res){
-                return $res;
-            }else{
-                return false;
-            }
+            return $result->fetch(PDO::FETCH_ASSOC);
         }
 
         //update
-        function update ($Id,$Date, $Horaire, $T_cons,$Reference) {
-            $query = "UPDATE `rendez-vous` SET `Id`= '$Id',`Date`='$Date',`Horaire`='$Horaire',`T_Consultation`='$T_cons',`Reference`='$Reference' WHERE Id=$Id";
+        function update ($Id,$date, $Horaire, $T_Consultation) {
+            $query = "UPDATE `rendez-vous` SET `Id`= '$Id',`date`='$date',`Horaire`='$Horaire',`T_Consultation`='$T_Consultation' WHERE Id=$Id";
+            // die($query);
             $Nobjet = new connection();
             $con=$Nobjet->connect();
-            $result= $con->query($query);
-
-            if($result){
+            
+            if($result= $con->query($query)){
                 return true;
-            } else{
+            }
+            else{
                 return false;
             }
 
@@ -72,3 +69,4 @@
         }
 
     }
+?>
