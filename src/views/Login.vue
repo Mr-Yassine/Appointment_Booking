@@ -29,9 +29,30 @@ export default {
       e.preventDefault();
       localStorage.setItem("userkey", this.ref);
       localStorage.removeItem("key");
-      this.$router.push("/reservation");
+      this.onsub();
     },
-  },
+  
+
+    async onsub(){
+
+      const response = await fetch( "http://localhost/Reservation/usersCont/edit/",{
+        method:"POST",
+        body:JSON.stringify({"ref":this.ref}),
+
+      });
+
+      const data= await response.json();
+      // console.log(data);
+      if(!(data.message)){
+        console.log(data);
+        this.$router.push("/Reservation/");
+
+      }else{
+        // console.log(data);
+          alert('Reference incorrecte');
+      }
+    },
+  }
 };
 </script>
 

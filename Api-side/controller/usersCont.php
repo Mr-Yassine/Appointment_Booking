@@ -105,5 +105,39 @@ class UsersCont {
 			echo json_encode(["message" => "La méthode n'est pas autorisée"]);
 		}
 	}
+
+	//edit 
+	function edit(){
+		
+		//On récupère les informations envoyées
+		$data = json_decode(file_get_contents("php://input"));
+
+		$user=new UsersModel();
+
+		if(!empty($data->ref)){
+
+			$user->Reference=$data->ref;
+
+			$value=$user->edit($data->ref);
+			// die(print_r($value));
+
+			if($value){
+                // Ici la création a fonctionné
+                // On envoie un code 201
+                http_response_code(201);
+                echo json_encode($value);
+			}else{
+				// Ici la création n'a pas fonctionné
+				// On envoie un code 503
+				http_response_code(503);
+				echo json_encode(["message" => "edit n'a pas été effectué".$value]);         
+			}
+
+		}else{
+			//On gère l'erreur
+			http_response_code(405);
+			echo json_encode(["message" => "La méthode n'est pas autorisée"]);
+		}
+	}
 }
 

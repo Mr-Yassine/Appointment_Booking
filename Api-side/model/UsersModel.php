@@ -37,5 +37,14 @@
             return $result->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        //edit
+        function edit($ref) {         
+            $query ="SELECT * FROM `users` WHERE Reference='$ref'";
+            // die($query);
+            $obj = new connection();
+            $con=$obj->connect();
+            $result =  $con->query($query);
+            return $result->fetch(PDO::FETCH_ASSOC);
+        }
         
     }
