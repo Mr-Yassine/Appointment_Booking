@@ -21,7 +21,7 @@ Une application web qui permet aux clients de prendre un rendez-vous en ligne.
 
 La possibilité de prendre un rendez-vous s'il a déjà la référence (CIN) pour authentifier, sinon il doit créer un compte pour avoir la possibilité de réserver.
 
-  - Authentification
+  - Authentification par reference
   - CRUD Rendez-Vous
 
 
